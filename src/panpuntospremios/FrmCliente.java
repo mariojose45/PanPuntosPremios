@@ -87,6 +87,9 @@ public class FrmCliente extends JFrame {
         add(btnMostrar);
         add(btnLimpiar);
 
+        btnGuardar.setEnabled(true);
+        btnActualizar.setEnabled(false);
+
         modelo.addColumn("ID");
         modelo.addColumn("Identificador");
         modelo.addColumn("Nombre");
@@ -99,7 +102,10 @@ public class FrmCliente extends JFrame {
         scroll.setBounds(30, 250, 780, 220);
         add(scroll);
 
-        btnMostrar.addActionListener(e -> mostrarClientes());
+        btnMostrar.addActionListener(e -> {
+            mostrarClientes();
+            limpiar();
+        });
 
         btnGuardar.addActionListener(e -> guardarCliente());
 
@@ -134,6 +140,9 @@ public class FrmCliente extends JFrame {
                     txtPuntos.setText(
                             tablaClientes.getValueAt(fila, 4).toString()
                     );
+
+                    btnActualizar.setEnabled(true);
+                    btnGuardar.setEnabled(false);
                 }
             }
         });
@@ -198,11 +207,25 @@ public class FrmCliente extends JFrame {
             return;
         }
 
+        String identificador = txtIdentificador.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+
+        if (identificador.isEmpty() || nombre.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Ingrese identificador y nombre"
+            );
+
+            return;
+        }
+
         conexion.actualizarCliente(
                 idCliente,
-                txtIdentificador.getText().trim(),
-                txtNombre.getText().trim(),
-                txtTelefono.getText().trim()
+                identificador,
+                nombre,
+                telefono
         );
 
         mostrarClientes();
@@ -219,5 +242,10 @@ public class FrmCliente extends JFrame {
         txtPuntos.setText("0");
 
         tablaClientes.clearSelection();
+
+        btnActualizar.setEnabled(false);
+        btnGuardar.setEnabled(true);
+
+        txtIdentificador.requestFocusInWindow();
     }
 }
