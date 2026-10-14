@@ -108,6 +108,8 @@ public class FrmProducto extends JFrame {
         add(btnActualizar);
         add(btnMostrar);
         add(btnLimpiar);
+        
+        btnActualizar.setEnabled(false);
 
         modelo.addColumn("ID");
         modelo.addColumn("Codigo");
@@ -162,6 +164,7 @@ public class FrmProducto extends JFrame {
                 txtEstado.setText(
                         tabla.getValueAt(fila, 6).toString()
                 );
+                btnActualizar.setEnabled(true);
             }
         });
 
